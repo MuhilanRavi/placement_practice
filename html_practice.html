@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Community Event Portal</title>
+
+<style>
+body{
+    font-family: Arial;
+    margin:20px;
+}
+
+nav a{
+    margin-right:15px;
+}
+
+#welcomeBanner{
+    background:blue;
+    color:white;
+    padding:15px;
+}
+
+.highlight{
+    background:yellow;
+    padding:3px;
+}
+
+.gallery img{
+    width:180px;
+    height:120px;
+}
+
+.imgBorder{
+    border:3px solid black;
+}
+
+form{
+    border:1px solid gray;
+    padding:20px;
+    width:350px;
+}
+
+input,select,textarea{
+    width:100%;
+    margin-bottom:10px;
+    padding:8px;
+}
+
+#videoMsg{
+    color:green;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body onbeforeunload="return leavePage()">
+
+<!-- Navigation -->
+<nav>
+    <a href="#home">Home</a>
+    <a href="#events">Events</a>
+    <a href="#contact">Contact</a>
+    <a href="help.html" target="_blank">Help</a>
+</nav>
+
+<!-- Main -->
+<section id="home">
+    <div id="welcomeBanner">
+        <h2>Welcome User</h2>
+        <p class="highlight">
+            Community events are now live!
+        </p>
+
+        <p>
+            <span style="color:red;font-weight:bold;">
+                Special Offer: Free entry for first 50 users
+            </span>
+        </p>
+    </div>
+</section>
+
+<br>
+
+<section id="events">
+    <h2 class="highlight">Past Community Events</h2>
+
+    <table border="1" class="gallery">
+        <tr>
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event1"
+                title="Music Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Music Fest</p>
+            </td>
+
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event2"
+                title="Food Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Food Carnival</p>
+            </td>
+
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event3"
+                title="Sports Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Sports Day</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event4"
+                title="Dance Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Dance Show</p>
+            </td>
+
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event5"
+                title="Book Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Book Fair</p>
+            </td>
+
+            <td>
+                <img src="https://via.placeholder.com/180"
+                alt="Event6"
+                title="Art Event"
+                class="imgBorder"
+                ondblclick="enlarge(this)">
+                <p>Art Expo</p>
+            </td>
+        </tr>
+    </table>
+</section>
+
+<br>
+
+<section id="contact">
+    <h2>Event Registration</h2>
+
+    <form onsubmit="showOutput(event)">
+
+        <input type="text"
+        id="name"
+        placeholder="Enter Name"
+        required
+        autofocus>
+
+        <input type="email"
+        placeholder="Enter Email"
+        required>
+
+        <input type="date" required>
+
+        <select id="eventType" onchange="showFee()">
+            <option value="">Select Event</option>
+            <option value="100">Music Event</option>
+            <option value="200">Sports Event</option>
+            <option value="150">Food Event</option>
+        </select>
+
+        <p id="fee"></p>
+
+        <input type="text"
+        id="phone"
+        placeholder="Phone Number"
+        onblur="validatePhone()">
+
+        <textarea id="feedback"
+        placeholder="Feedback"
+        onkeyup="countChars()"></textarea>
+
+        <p>Characters: <span id="count">0</span></p>
+
+        <textarea placeholder="Message"></textarea>
+
+        <button type="submit" onclick="confirmMsg()">
+            Submit
+        </button>
+
+        <output id="outputMsg"></output>
+    </form>
+</section>
+
+<br>
+
+<h2>Promo Video</h2>
+
+<video width="320" controls oncanplay="videoReady()">
+    <source src="sample.mp4" type="video/mp4">
+</video>
+
+<p id="videoMsg"></p>
+
+<br>
+
+<h2>Preferences</h2>
+
+<button onclick="savePreference()">
+    Save Preference
+</button>
+
+<button onclick="clearStorage()">
+    Clear Preferences
+</button>
+
+<br><br>
+
+<h2>Location</h2>
+
+<button onclick="findLocation()">
+    Find Nearby Events
+</button>
+
+<p id="location"></p>
+
+<!-- Footer -->
+<footer>
+    <p>Local Community Event Portal</p>
+</footer>
+
+<script>
+
+window.onload=function(){
+    let saved=localStorage.getItem("event");
+    if(saved){
+        document.getElementById("eventType").value=saved;
+    }
+}
+
+function showFee(){
+    let value=document.getElementById("eventType").value;
+    document.getElementById("fee").innerHTML="Event Fee: ₹"+value;
+}
+
+function validatePhone(){
+    let phone=document.getElementById("phone").value;
+
+    if(phone.length!=10){
+        alert("Enter valid 10 digit phone number");
+    }
+}
+
+function confirmMsg(){
+    alert("Button Clicked");
+}
+
+function enlarge(img){
+    img.style.width="300px";
+    img.style.height="200px";
+}
+
+function countChars(){
+    let text=document.getElementById("feedback").value;
+    document.getElementById("count").innerHTML=text.length;
+}
+
+function videoReady(){
+    document.getElementById("videoMsg").innerHTML=
+    "Video ready to play";
+}
+
+function leavePage(){
+    return "Form not completed";
+}
+
+function savePreference(){
+    let event=document.getElementById("eventType").value;
+    localStorage.setItem("event",event);
+    sessionStorage.setItem("temp","saved");
+    alert("Preference Saved");
+}
+
+function clearStorage(){
+    localStorage.clear();
+    sessionStorage.clear();
+    alert("Storage Cleared");
+}
+
+function findLocation(){
+
+    let options={
+        enableHighAccuracy:true,
+        timeout:5000
+    };
+
+    navigator.geolocation.getCurrentPosition(success,error,options);
+
+    function success(position){
+        document.getElementById("location").innerHTML=
+        "Latitude: "+position.coords.latitude+
+        "<br>Longitude: "+position.coords.longitude;
+    }
+
+    function error(err){
+        document.getElementById("location").innerHTML=
+        "Error: "+err.message;
+    }
+}
+
+function showOutput(event){
+    event.preventDefault();
+
+    document.getElementById("outputMsg").innerHTML=
+    "Registration Successful";
+}
+
+</script>
+
+</body>
+</html>
